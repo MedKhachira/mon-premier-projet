@@ -8,7 +8,7 @@ export class AppareilService {
   appareilsSubject = new Subject<any[]>();
 
     private appareils = [
-        {
+        /*{
           id : 1,
           name: 'Machine à laver',
           status: 'éteint'
@@ -22,7 +22,7 @@ export class AppareilService {
           id : 3,
           name: 'Ordinateur',
           status: 'éteint'
-        }
+        }*/
       ];
     
     constructor(private httpClient: HttpClient) { }
@@ -78,7 +78,7 @@ export class AppareilService {
 
   saveAppareilsToServer() {
     this.httpClient
-      .post('https://http-client-demo-11151.firebaseio.com/appareils.json', this.appareils)
+      .put('https://http-client-demo-11151.firebaseio.com/appareils.json', this.appareils)
       .subscribe(
         () => {
           console.log('Enregistrement terminé !');
@@ -87,5 +87,20 @@ export class AppareilService {
           console.log('Erreur ! : ' + error);
         }
       );
-}
+  }
+
+  getAppareilsFromServer() {
+    this.httpClient
+      .get<any[]>('https://http-client-demo-11151.firebaseio.com/appareils.json')
+      .subscribe(
+        (response) => {
+          this.appareils = response;
+          this.emitAppareilSubject();
+        },
+        (error) => {
+          console.log('Erreur ! : ' + error);
+        }
+      );
+  }
+
 }
